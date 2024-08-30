@@ -1,0 +1,64 @@
+name: Deploy on Hostinger Server
+
+on:
+  # Ejecuta cuando detecta cambios en la rama main o se registra un pull_req
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Permite ejecutar el flujo a mano
+  workflow_dispatch:
+
+jobs:
+  # Compila el codigo y genera la salida en la carpeta dist
+  build:
+    name: Build ⚒️
+    # Donde se va a ejecutar
+    runs-on: ubuntu-latest
+
+    # Pasos que va a ejecutar (receta de cocina)
+    steps:
+      - name: Pull changes
+
+  # Segundo trabajo, se encarga de correr las pruebas en js
+  test:
+    name: Test 🧪
+    runs-on: ubuntu-latest
+    steps:
+      - uses: action/checkout@main
+      - name: Run Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
+          
+      - name: npm install
+        run: npm ci
+
+      - name: run tests
+        run: npm test
+        
+  # Envia a hostinger los archivos que estan dentro de dist    
+  deploy:
+     name: Deploy 🚀
+     needs: [build, test]
+     
+     runs-on: ubuntu-latest
+     steps:
+       - name: Checkout repository
+         uses: action/checkout@main
+
+       - name: Download artifact
+         uses: action/download-artifact@main
+         with:
+           name: dist
+           path: dist
+
+       - name: Sync files to Hostinger
+         uses: SamKirkland/FTP-Deploy-Action@4.3.5 # Libreria publica para usar ftp y enviar archivos https://github.com/SamKirkland/FTP-Deploy-Action
+         with:
+           server: rchiarino.com
+           username: ${{ secrets.USERNAME }}
+           password: ${{ secrets.PASSWD }}
+          
+         
