@@ -76,7 +76,7 @@ jobs:
       # Libreria publica para usar ftp y enviar archivos https://github.com/SamKirkland/FTP-Deploy-Action
          with:
            server: rchiarino.com
-           username: ${{ secrets.USERNAME }}
-           password: ${{ secrets.PASSWD }}
+           username: ${{ secrets.FTP_USERNAME }}
+           password: ${{ secrets.FTP_PASSWD }}
           
          
