@@ -31,7 +31,7 @@ jobs:
       - name: Building project
         run: npm run build
 
-      - name: Archiveing dist folder
+      - name: Archiving dist folder
         uses: actions/upload-artifact@main
         with:
           name: dist
@@ -72,7 +72,7 @@ jobs:
            path: dist
 
        - name: Syncing files to Hostinger
-         uses: SamKirkland/FTP-Deploy-Action@4.3.5 # Libreria publica para usar ftp y enviar archivos https://github.com/SamKirkland/FTP-Deploy-Action
+         uses: SamKirkland/FTP-Deploy-Action@latest # Libreria publica para usar ftp y enviar archivos https://github.com/SamKirkland/FTP-Deploy-Action
          with:
            server: rchiarino.com
            username: ${{ secrets.USERNAME }}
