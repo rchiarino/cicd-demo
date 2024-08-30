@@ -19,7 +19,23 @@ jobs:
 
     # Pasos que va a ejecutar (receta de cocina)
     steps:
-      - name: Pull changes
+      - uses: action/checkout@main
+      - name: Runing Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
+          
+      - name: npm install
+        run: npm ci
+
+      - name: Building project
+        run: npm run build
+
+      - name: Archiveing dist folder
+        uses: action/upload-artifact@main
+        with:
+          name: dist
+          path: dist
 
   # Segundo trabajo, se encarga de correr las pruebas en js
   test:
@@ -48,13 +64,13 @@ jobs:
        - name: Checkout repository
          uses: action/checkout@main
 
-       - name: Download artifact
+       - name: Downloading dist folder
          uses: action/download-artifact@main
          with:
            name: dist
            path: dist
 
-       - name: Sync files to Hostinger
+       - name: Syncing files to Hostinger
          uses: SamKirkland/FTP-Deploy-Action@4.3.5 # Libreria publica para usar ftp y enviar archivos https://github.com/SamKirkland/FTP-Deploy-Action
          with:
            server: rchiarino.com
