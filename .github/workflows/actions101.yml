@@ -19,7 +19,7 @@ jobs:
 
     # Pasos que va a ejecutar (receta de cocina)
     steps:
-      - uses: action/checkout@main
+      - uses: actions/checkout@main
       - name: Runing Node.js
         uses: actions/setup-node@v1
         with:
@@ -32,7 +32,7 @@ jobs:
         run: npm run build
 
       - name: Archiveing dist folder
-        uses: action/upload-artifact@main
+        uses: actions/upload-artifact@main
         with:
           name: dist
           path: dist
@@ -40,9 +40,10 @@ jobs:
   # Segundo trabajo, se encarga de correr las pruebas en js
   test:
     name: Test 🧪
+    needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: action/checkout@main
+      - uses: actions/checkout@main
       - name: Run Node.js
         uses: actions/setup-node@v1
         with:
@@ -62,10 +63,10 @@ jobs:
      runs-on: ubuntu-latest
      steps:
        - name: Checkout repository
-         uses: action/checkout@main
+         uses: actions/checkout@main
 
        - name: Downloading dist folder
-         uses: action/download-artifact@main
+         uses: actions/download-artifact@main
          with:
            name: dist
            path: dist
