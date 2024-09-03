@@ -1,0 +1,33 @@
+---
+title: Configuración de GitHub
+description: Como configurar flujos de trabajo en GitHub Actions dentro de un repositorio.
+full: false
+---
+
+import { File, Folder, Files } from "fumadocs-ui/components/files";
+
+## Estrutura de archivos
+
+A continuación se muestra una estructura de archivos de un proyecto generico que se desea configurar en GitHub Actions.
+
+<Files>
+  <Folder name=".github" defaultOpen>
+    <Folder name="workflows" defaultOpen>
+      <File name="myFirstWorkflow.yml" />
+      <File name="test.yml" />
+      <File name="actions101.yml" />
+      <File name="⋮" icon />
+    </Folder>
+  </Folder>
+  <Folder name="src">
+    <Folder name="___test___">
+      <File name="nothingToSeeHere.test.js" />
+      <File name="⋮" icon />
+    </Folder>
+    <File name="App.tsx" />
+    <File name="⋮" icon />
+  </Folder>
+  <File name="README.md" />
+  <File name="package.json" />
+  <File name="⋮" icon />
+</Files>

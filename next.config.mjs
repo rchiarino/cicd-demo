@@ -1,7 +1,12 @@
+import { createMDX } from "fumadocs-mdx/next";
+
+const withMDX = createMDX();
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-    output: 'export',
-    distDir: 'dist'
+const config = {
+  reactStrictMode: true,
+  output: "export",
+  distDir: "dist",
 };
 
-export default nextConfig;
+export default withMDX(config);
