@@ -1,3 +1,5 @@
+[![Deploy on Hostinger Server](https://github.com/rchiarino/cicd-demo/actions/workflows/actions101.yml/badge.svg)](https://github.com/rchiarino/cicd-demo/actions/workflows/actions101.yml)
+
 ## Introducción
 
 Este repositorio ha sido creado como una guía práctica para demostrar el uso de GitHub Actions en la implementación de un pipeline de CI/CD (Integración Continua/Despliegue Continuo). A través de este proyecto, se busca mostrar cómo la automatización de pruebas, compilaciones y despliegues puede facilitar un desarrollo ágil y eficiente en cualquier proyecto de software.
