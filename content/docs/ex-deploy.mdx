@@ -7,10 +7,12 @@ full: false
 import { Step, Steps } from "fumadocs-ui/components/steps";
 import { Callout } from "fumadocs-ui/components/callout";
 
+## Descripción
+
 Este workflow de GitHub Actions está diseñado para automatizar el proceso de despliegue en un servidor Hostinger.
 Se activa cuando se detectan _**cambios en la rama main**_, cuando se abre un _**pull request hacia main**_, o de manera **manual** mediante `workflow_dispatch`.
 
-## Trabajos principales
+### Trabajos principales
 
 <Steps>
   <Step>
@@ -35,7 +37,7 @@ desde la compilación hasta la implementación final en el servidor.
 
 ## Código
 
-```yml
+```yaml
 name: Deploy on Hostinger Server
 
 on:

@@ -4,7 +4,30 @@ description: Ejemplo de un flujo de trabajo para un proyecto Node.js
 full: false
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consequat erat quis orci condimentum dictum. Nunc semper, ipsum eget bibendum viverra, lacus mauris vulputate nibh, vitae venenatis risus enim vitae enim. Donec blandit vehicula nisi eget blandit. Vestibulum tincidunt eros euismod cursus semper. Sed varius nunc placerat orci laoreet pulvinar. Sed gravida fringilla urna, in vulputate orci rhoncus nec. Sed non dignissim turpis.
+import { Step, Steps } from "fumadocs-ui/components/steps";
+
+## Descripción
+
+Este workflow de GitHub Actions está configurado para ejecutarse automáticamente cuando se realiza un `push` o se abre un `pull request` en la rama `main` de un repositorio. El trabajo, llamado **build**, se ejecuta en un entorno `ubuntu-latest` y sigue una serie de pasos para garantizar la correcta integración continua del código.
+
+### Pasos
+
+<Steps>
+  <Step>
+    Primero, se descarga el código del repositorio con `actions/checkout`
+  </Step>
+  <Step>
+    Luego se configura Node.js en la versión 16 usando `actions/setup-node`.
+  </Step>
+  <Step>
+    Después, se instalan las dependencias necesarias del proyecto con `npm
+    install`
+  </Step>
+  <Step>
+    Se ejecutan las pruebas definidas en el proyecto con `npm test` para
+    asegurar que todo funcione correctamente
+  </Step>
+</Steps>
 
 ## Codigo
 
@@ -36,3 +59,18 @@ jobs:
       - name: Run tests
         run: npm test
 ```
+
+## Extras
+
+Es posible ejecutar multiples variaciones de trabajos dentro del mismo flujo, para esto se utilizan las **matrices**. Estas nos permitn combinar diferentes variables y ejecutar el mismo trabajo con diferentes configuraciones.
+
+```yaml
+jobs:
+  example_matrix:
+    strategy:
+      matrix:
+        version: [10, 12, 14]
+        os: [ubuntu-latest, windows-latest]
+```
+
+Con esto se ejecutará el trabajo `example_matrix` con las combinaciones de **versiones** y **sistemas operativos** especificados en la matriz. [ver más](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/running-variations-of-jobs-in-a-workflow)

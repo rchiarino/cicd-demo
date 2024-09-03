@@ -1,0 +1,28 @@
+---
+title: Artefactos y Cache
+description: permiten compartir datos entre trabajos en un flujo de trabajo y almacenarlos una vez que el trabajo se haya completado.
+full: false
+---
+
+## Descripción
+
+Los _Artifacts_ o _Artefactos_, permiten persistir datos después de que un trabajo se haya completado y compartir esos datos con otro trabajo en el mismo flujo de trabajo.
+
+Un artefacto es un archivo o una colección de archivos producidos durante la ejecución de un flujo de trabajo. Por ejemplo, puedes utilizar artefactos para guardar la **salida de compilación y pruebas** después de que una ejecución de flujo de trabajo haya finalizado.
+Todas las acciones y flujos de trabajo llamados dentro de una ejecución tienen acceso de escritura a los artefactos de esa ejecución.
+
+Por defecto, GitHub **almacena** los registros de compilación y artefactos durante `90 días`, y este período de retención puede ser personalizado.
+
+### Usos comunes
+
+- Archivos de registro y volcados de memoria
+- Resultados de pruebas, fallos y capturas de pantalla
+- Archivos binarios o comprimidos
+- Salida de rendimiento de pruebas de estrés y resultados de cobertura de código
+
+## Comparación entre Artefactos y Cache
+
+Los artefactos y el almacenamiento en caché son similares porque ambos permiten almacenar archivos en GitHub, pero cada característica ofrece diferentes casos de uso y no pueden ser utilizados de manera intercambiable.
+
+- Usa el almacenamiento en caché cuando quieras reutilizar archivos que no cambian con frecuencia entre trabajos o ejecuciones de flujos de trabajo, como dependencias de compilación de un sistema de gestión de paquetes.
+- Usa artefactos cuando quieras guardar archivos producidos por un trabajo para verlos después de que una ejecución de flujo de trabajo haya finalizado, como binarios compilados o registros de compilación.
