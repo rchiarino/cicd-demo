@@ -5,6 +5,7 @@
         "...",
         "---Ejemplos---",
         "ex-nodejs",
+        "ex-deploy",
         "---Links---",
         "[Actions Marketplace](https://github.com/marketplace?type=actions)",
         "[Github Actions](https://github.com/features/actions)"

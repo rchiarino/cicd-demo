@@ -1,0 +1,131 @@
+---
+title: Deploy en hosting
+description: Ejemplo de un flujo de despliegue de una aplicación web
+full: false
+---
+
+import { Step, Steps } from "fumadocs-ui/components/steps";
+import { Callout } from "fumadocs-ui/components/callout";
+
+Este workflow de GitHub Actions está diseñado para automatizar el proceso de despliegue en un servidor Hostinger.
+Se activa cuando se detectan _**cambios en la rama main**_, cuando se abre un _**pull request hacia main**_, o de manera **manual** mediante `workflow_dispatch`.
+
+## Trabajos principales
+
+<Steps>
+  <Step>
+    **Build**: Compila el código del proyecto, instalando dependencias
+    necesarias y generando la salida en la carpeta dist. Esta carpeta se archiva
+    como un artefacto para ser utilizada en los siguientes trabajos.
+  </Step>
+  <Step>
+    **Test**: Ejecuta las pruebas del proyecto para asegurar la calidad del
+    código. Este trabajo depende de la finalización exitosa del proceso de
+    compilación.
+  </Step>
+  <Step>
+    **Deploy**: Una vez que las pruebas se completan con **éxito**, este trabajo
+    despliega el código en un servidor Hostinger. Utiliza FTP para sincronizar
+    los archivos generados en la carpeta `dist` con el servidor remoto,
+    garantizando que la última versión del proyecto esté en producción.
+  </Step>
+</Steps>
+Este flujo asegura un proceso de integración y despliegue continuo (CI/CD) eficiente,
+desde la compilación hasta la implementación final en el servidor.
+
+## Código
+
+```yml
+name: Deploy on Hostinger Server
+
+on:
+  # Ejecuta cuando detecta cambios en la rama main o se registra un pull_req
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+  # Permite ejecutar el flujo a mano
+  workflow_dispatch:
+
+jobs:
+  # Compila el codigo y genera la salida en la carpeta dist
+  build:
+    name: Build ⚒️
+    # Donde se va a ejecutar
+    runs-on: ubuntu-latest
+
+    # Pasos que va a ejecutar (receta de cocina)
+    steps:
+      - uses: actions/checkout@main
+      - name: Runing Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
+
+      - name: npm install
+        run: npm ci
+
+      - name: Building project
+        run: npm run build
+
+      - name: Archiving dist folder
+        uses: actions/upload-artifact@main
+        with:
+          name: dist
+          path: dist
+
+  # Segundo trabajo, se encarga de correr las pruebas en js
+  test:
+    name: Test 🧪
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - name: Run Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
+
+      - name: npm install
+        run: npm ci
+
+      - name: run tests
+        run: npm test
+
+  # Envia a hostinger los archivos que estan dentro de dist
+  deploy:
+    name: Deploy 🚀
+    needs: [build, test]
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@main
+
+      - name: Downloading dist folder
+        uses: actions/download-artifact@main
+        with:
+          name: dist
+          path: dist
+
+      - name: Syncing files to Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        # Libreria publica para usar ftp y enviar archivos https://github.com/SamKirkland/FTP-Deploy-Action
+        with:
+          server: ftp.rchiarino.com
+          local-dir: ./dist/
+          server-dir: ./
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWD }}
+```
+
+Para utilizar este flujo en tu proyecto, revisar la siguiete [documentación](/setup).
+
+<Callout title="importante" type="warn">
+  En el workflow anterior se utilizan **secrets** para almacenar las
+  credenciales de FTP. Estas variables se deben configurar en el repositorio de
+  GitHub. En particular `secrets.FTP_USERNAME` y `secrets.FTP_PASSWD`. <br />{" "}
+  Para más información, revisar la [documentación
+  oficial](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
+</Callout>
