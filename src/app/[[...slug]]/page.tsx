@@ -20,6 +20,7 @@ export default async function Page({
 
   return (
     <DocsPage
+      tableOfContent={{ style: "normal", single: false }}
       toc={page.data.toc}
       full={page.data.full}
       footer={{ enabled: false }}

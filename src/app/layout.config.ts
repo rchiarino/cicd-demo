@@ -6,7 +6,7 @@ import { HomeLayoutProps } from "fumadocs-ui/home-layout";
 export const layoutOptions: DocsLayoutProps = {
   tree: pageTree,
   nav: {
-    title: "ISA 2 - CI/CD",
+    title: "CI/CD - Demo",
   },
   sidebar: {
     collapsible: false,
