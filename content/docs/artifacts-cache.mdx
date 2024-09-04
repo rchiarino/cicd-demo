@@ -1,10 +1,10 @@
 ---
 title: Artefactos y Cache
-description: permiten compartir datos entre trabajos en un flujo de trabajo y almacenarlos una vez que el trabajo se haya completado.
+description: Permiten compartir datos entre trabajos en un flujo de trabajo y almacenarlos una vez que el trabajo se haya completado.
 full: false
 ---
 
-## Descripción
+## Artefactos
 
 Los _Artifacts_ o _Artefactos_, permiten persistir datos después de que un trabajo se haya completado y compartir esos datos con otro trabajo en el mismo flujo de trabajo.
 
@@ -20,9 +20,99 @@ Por defecto, GitHub **almacena** los registros de compilación y artefactos dura
 - Archivos binarios o comprimidos
 - Salida de rendimiento de pruebas de estrés y resultados de cobertura de código
 
+## Cache
+
+La _Cache_ o _Almacenamiento en caché_, permite almacenar datos entre ejecuciones de flujos de trabajo para mejorar el rendimiento y reducir el tiempo de ejecución.
+Es útil para almacenar _dependencias_ de compilación, como módulos de Node.js o paquetes de NuGet, que **no cambian con frecuencia** y pueden **ser reutilizados** entre ejecuciones de flujos de trabajo.
+
+Para almacenar datos en caché, usamos la acción `actions/cache` que permite guardar y recuperar archivos y directorios en el almacenamiento en caché de GitHub. Estos archivos se identifican por una clave única que se genera a partir de una lista de claves y un hash de contenido. [ver más](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows)
+
+### Usos comunes
+
+- node_modules para proyectos Node.js
+- Paquetes de NuGet para proyectos .NET
+- Dependencias de Maven para proyectos Java
+
+---
+
 ## Comparación entre Artefactos y Cache
 
 Los artefactos y el almacenamiento en caché son similares porque ambos permiten almacenar archivos en GitHub, pero cada característica ofrece diferentes casos de uso y no pueden ser utilizados de manera intercambiable.
 
-- Usa el almacenamiento en caché cuando quieras reutilizar archivos que no cambian con frecuencia entre trabajos o ejecuciones de flujos de trabajo, como dependencias de compilación de un sistema de gestión de paquetes.
 - Usa artefactos cuando quieras guardar archivos producidos por un trabajo para verlos después de que una ejecución de flujo de trabajo haya finalizado, como binarios compilados o registros de compilación.
+- Usa el almacenamiento en caché cuando quieras reutilizar archivos que no cambian con frecuencia entre trabajos o ejecuciones de flujos de trabajo, como dependencias de compilación de un sistema de gestión de paquetes.
+
+---
+
+## Ejemplos
+
+### Cache de dependencias de Node.js
+
+En este ejemplo, se almacenan en caché los módulos de Node.js para evitar la descarga de dependencias en cada ejecución del flujo de trabajo.
+
+```yaml
+name: Caching with npm
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+        name: List the state of node modules
+        continue-on-error: true
+        run: npm list
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm test
+```
+
+### Artefactos de compilación
+
+En este ejemplo, se archivan los artefactos de producción generados durante la compilación del proyecto. Estos artefactos pueden ser utilizados en trabajos posteriores, como pruebas o [despliegues](/ex-deploy).
+
+```yaml
+name: Build and Test
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm test
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
+```
