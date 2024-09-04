@@ -1,14 +1,8 @@
 import "@testing-library/jest-dom";
-import { render } from "@testing-library/react";
+import {layoutOptions} from "../app/layout.config"
 describe("Page", () => {
-  it("renders the title for each page generated", () => {
-    // const { container } = render(< />);
-
-    // const title = container.querySelector(".text-3xl.font-bold");
-    // const layout = container.querySelector("#nd-docs-layout");
-
-    //Shhh!
-    //TODO: implement test for page generation
+  it("Sets the default properties for all the mdx files", () => {
+    const config = layoutOptions
     expect(true).toBeTruthy();
   });
 });

@@ -35,92 +35,36 @@ A continuación se muestra una estructura de archivos de un proyecto generico qu
 ## Estructura del YAML
 
 ```
-name: Deploy on Hostinger Server
+name: Ejemplo de workflow
 
 on:
-  # Ejecuta cuando detecta cambios en la rama main o se registra un pull_req
+  # Ejecuta cuando detecta cambios en la rama main
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Permite ejecutar el flujo a mano
-  workflow_dispatch:
-
+  
 jobs:
-  # Compila el codigo y genera la salida en la carpeta dist
-  build:
-    name: Build ⚒️
-    # Donde se va a ejecutar
-    runs-on: ubuntu-latest
+  nombre-del-trabajo: # Esto se cambia a lo que nos interece
+    name: build # Nombre que se muestra en github
+    runs-on: ubuntu-latest # Donde se va a ejecutar
 
     # Pasos que va a ejecutar (receta de cocina)
     steps:
-      - uses: actions/checkout@main
-      - name: Runing Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 18.x
-          
-      - name: npm install
-        run: npm ci
-
-      - name: Building project
-        run: npm run build
-
-      - name: Archiving dist folder
-        uses: actions/upload-artifact@main
-        with:
-          name: dist
-          path: dist
-
+      - uses: ...
+      - name: ...
+        
   # Segundo trabajo, se encarga de correr las pruebas en js
-  test:
-    name: Test 🧪
-    needs: build
+  otro-trabajo:
+    name: mi-trabajo-secundario
+    needs: nombre-de-trabajo-anterior
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
-      - name: Run Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 18.x
-          
-      - name: npm install
-        run: npm ci
-
-      - name: run tests
-        run: npm test
-        
-  # Envia a hostinger los archivos que estan dentro de dist    
-  deploy:
-     name: Deploy 🚀
-     needs: [build, test]
-     
-     runs-on: ubuntu-latest
-     steps:
-       - name: Checkout repository
-         uses: actions/checkout@main
-
-       - name: Downloading dist folder
-         uses: actions/download-artifact@main
-         with:
-           name: dist
-           path: dist
-
-       - name: Syncing files to Hostinger
-         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-      # Libreria publica para usar ftp y enviar archivos https://github.com/SamKirkland/FTP-Deploy-Action
-         with:
-           server: ftp.rchiarino.com
-           local-dir: ./dist/
-           server-dir: ./
-           username: ${{ secrets.FTP_USERNAME }}
-           password: ${{ secrets.FTP_PASSWD }}
+      ...
 ```
+Se puede ver el workflow completo [acá](/ex-deploy).
 
 El `on:` muestra el comienzo del workflow y luego se especifica los eventos en los que se corre dicho workflow.
 
 Por otro lado, el `jobs:` pasa a listar todos los jobs a ejecutar. Si vemos el primero no contiene `needs:` porque no necesita de que otros se ejecuten, pero si el test necesita del build y el deploy de los dos anteriores.
 
 El `runs-on:` denomina el runner en el cual va a correr, como mencionamos anteriormente cada job corre en uno nuevo.
+

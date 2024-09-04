@@ -7,6 +7,7 @@ const config = {
   reactStrictMode: true,
   output: "export",
   distDir: "dist",
+  images: { unoptimized: true }
 };
 
 export default withMDX(config);
