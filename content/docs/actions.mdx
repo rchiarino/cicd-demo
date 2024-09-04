@@ -1,5 +1,46 @@
 ---
 title: Qué es GitHub Actions
-description: description
+description: Descripción de la herramienta GitHub Actions
 full: false
 ---
+
+## Resumen
+
+GitHub Actions es una plataforma de integración y despliegue continua CI/CD. Esta permite automatizar el proceso de build, tests y deploy de una aplicación. Podemos crear workflows (flujos de trabajo) que hagan el build, corran los tests o hagan el deploy a producción sobre cada pull request en el repositorio asociado.
+
+Los workflows también pueden ser creados para cuando otros eventos suceden en el repositorio. Un ejemplo sería crear un workflow para cuando alguien crea un issue nuevo asignarle las etiquetas correctas.
+
+## Componentes de GitHub Actions
+
+### Workflows
+
+Es un proceso automatizado modificable que corre uno o mas jobs. Se define en un archivo YAML que se encuentra en la carpeta github/workflows y corre cuando lo dispara un evento, a mano o en cierto día y hora. 
+
+Los workflows contienen jobs que pueden correr secuencialmente o en paralelo ya que cada uno corre en su propia máquina virtual.
+
+### Eventos
+
+Un evento es una actividad específica que dispara el workflow. Hay muchos tipos de eventos.
+<img src="../img/events1" alt="Texto alternativo" style={{ height: '300px' }} />
+<img src="../img/events2" alt="Texto alternativo" style={{ width: '300px' }} />
+
+### Jobs
+
+Un job o trabajo es una serie de pasos que corren en el mismo runner. Cada paso puede ser una shell script o una acción a ser ejecutada.
+
+Para hacer que un diferentes jobs se ejecuten en secuencia uno de ellos debe depender del otro.
+
+### Actions
+
+Una acción es una aplicación personalizada para la platforma que ejecuta una tarea. Permite reducir la cantidad de código repetido en un workflow.
+
+Podemos escribir nuestras propias acciones o buscar y seleccionar aquellas que se encuentran GitHub Marketplace.
+
+### Runner
+
+Un runner es un servidor que corre el workflow cuando este se dispara. Cada runner puede correr solo un job a la vez.
+
+GitHub provee runners con Ubuntu, Windows y  macOS, cada workflow corre en una nueva máquina virtual.
+
+Si necesitamos un OS diferente o un requerimiento específico del hardware podemos hostear nuestros propios runners.
+
