@@ -22,46 +22,49 @@ Los workflows contienen jobs que pueden correr secuencialmente o en paralelo ya 
 
 Un evento es una actividad específica que dispara el workflow. Hay muchos tipos de eventos.
 
-- `branch_protection_rule`
-- `check_run`
-- `check_suite`
-- `create`
-- `delete`
-- `deployment`
-- `deployment_status`
-- `discussion`
-- `discussion_comment`
-- `fork`
-- `gollum`
-- `issue_comment`
-- `issues`
-- `label`
-- `merge_group`
-- `milestone`
-- `page_build`
-- `project`
-- `project_card`
-- `project_column`
-- `public`
-- `pull_request`
-- `pull_request_comment` (use `issue_comment`)
-- `pull_request_review`
-- `pull_request_review_comment`
-- `pull_request_target`
-- `push`
-- `registry_package`
-- `release`
-- `repository_dispatch`
-- `schedule`
-- `status`
-- `watch`
-- `workflow_call`
-- `workflow_dispatch`
-- `workflow_run`
+| **Evento**                    | **Descripción del Disparador**                                                                                                                                              |
+|-------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `branch_protection_rule`       | Se dispara cuando una regla de protección de ramas es creada, editada o eliminada.                                                                                           |
+| `check_run`                    | Se dispara cuando una ejecución de verificación es creada, completada o solicitada de nuevo.                                                                                 |
+| `check_suite`                  | Se dispara cuando una suite de verificaciones es creada, completada o solicitada de nuevo.                                                                                   |
+| `create`                       | Se dispara cuando se crea una rama o etiqueta.                                                                                                                              |
+| `delete`                       | Se dispara cuando se elimina una rama o etiqueta.                                                                                                                           |
+| `deployment`                   | Se dispara cuando se crea un deployment (despliegue).                                                                                                                       |
+| `deployment_status`            | Se dispara cuando el estado de un deployment cambia (por ejemplo, éxito o fallo).                                                                                           |
+| `discussion`                   | Se dispara cuando se crea, edita, cierra o reabre una discusión.                                                                                                            |
+| `discussion_comment`           | Se dispara cuando se crea, edita o elimina un comentario en una discusión.                                                                                                  |
+| `fork`                         | Se dispara cuando alguien hace un fork del repositorio.                                                                                                                     |
+| `gollum`                       | Se dispara cuando se realizan cambios en las páginas Wiki del repositorio.                                                                                                  |
+| `issue_comment`                | Se dispara cuando se crea, edita o elimina un comentario en un issue o en un pull request (para `pull_request_comment` se usa `issue_comment`).                              |
+| `issues`                       | Se dispara cuando se abre, edita, cierra, reabre o elimina un issue.                                                                                                        |
+| `label`                        | Se dispara cuando se crea, edita o elimina una etiqueta (label) en el repositorio.                                                                                           |
+| `merge_group`                  | Se dispara cuando se procesa un grupo de merges (fusión de múltiples pull requests).                                                                                         |
+| `milestone`                    | Se dispara cuando se crea, edita, cierra o elimina un hito (milestone).                                                                                                     |
+| `page_build`                   | Se dispara cuando GitHub Pages genera una nueva página o la vuelve a construir.                                                                                             |
+| `project`                      | Se dispara cuando se crea, actualiza o elimina un proyecto del repositorio.                                                                                                 |
+| `project_card`                 | Se dispara cuando se crea, actualiza o elimina una tarjeta de proyecto.                                                                                                     |
+| `project_column`               | Se dispara cuando se crea, actualiza o elimina una columna de proyecto.                                                                                                     |
+| `public`                       | Se dispara cuando un repositorio se hace público.                                                                                                                           |
+| `pull_request`                 | Se dispara cuando se abre, cierra, reabre, edita o fusiona un pull request, o cuando se sincronizan cambios a él.                                                            |
+| `pull_request_review`          | Se dispara cuando un pull request es revisado o cuando se solicitan, edita o descartan revisiones.                                                                           |
+| `pull_request_review_comment`  | Se dispara cuando se crea, edita o elimina un comentario en un pull request durante una revisión.                                                                            |
+| `pull_request_target`          | Similar a `pull_request`, pero se usa para ejecutar acciones en el contexto del repositorio de destino en lugar del fork, para seguridad en los forks.                        |
+| `push`                         | Se dispara cuando se hace un push a una rama del repositorio, incluyendo nuevos commits o tags.                                                                              |
+| `registry_package`             | Se dispara cuando se publica o elimina un paquete en GitHub Packages.                                                                                                       |
+| `release`                      | Se dispara cuando se publica, edita, borra o pre-lanza una release.                                                                                                         |
+| `repository_dispatch`          | Se dispara cuando una acción es activada manualmente por una API externa.                                                                                                   |
+| `schedule`                     | Se dispara a intervalos programados definidos en el workflow (`cron`).                                                                                                      |
+| `status`                       | Se dispara cuando cambia el estado de un commit (ej. éxito o fallo en verificaciones externas).                                                                              |
+| `watch`                        | Se dispara cuando alguien comienza a observar (star) un repositorio.                                                                                                        |
+| `workflow_call`                | Permite llamar a otros workflows como si fueran funciones (reutilización de workflows).                                                                                      |
+| `workflow_dispatch`            | Permite iniciar un workflow manualmente desde la interfaz de GitHub Actions.                                                                                                |
+| `workflow_run`                 | Se dispara cuando otro workflow ha terminado su ejecución.                                                                                                                  |
+
+---
 
 ### Jobs
 
-Un job o trabajo es una serie de pasos que corren en el mismo runner. Cada paso puede ser una shell script o una acción a ser ejecutada.
+Un job o trabajo es una serie de pasos que corren en el mismo [runner](#runner). Cada paso puede ser una shell script o una acción a ser ejecutada.
 
 Para hacer que un diferentes jobs se ejecuten en secuencia uno de ellos debe depender del otro.
 
